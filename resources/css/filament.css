@@ -1,0 +1,62 @@
+/* === Custom Filament Theme Premium === */
+
+/* Sidebar */
+.filament-sidebar {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    color: #f1f5f9 !important;
+    font-size: 15px;
+}
+
+/* Sidebar header */
+.filament-sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.filament-sidebar-header img {
+    border-radius: 10px;
+}
+
+/* Sidebar menu */
+.filament-sidebar-nav a {
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+}
+.filament-sidebar-nav a:hover {
+    background: rgba(250, 204, 21, 0.15);
+    color: #facc15; /* Amber highlight */
+}
+.filament-sidebar-nav a.is-active {
+    background: #facc15 !important;
+    color: #1e293b !important;
+    font-weight: 600;
+}
+
+/* Topbar */
+.filament-main-topbar {
+    background: #1e293b !important;
+    border-bottom: 1px solid #334155;
+    color: #f8fafc !important;
+}
+
+/* Dashboard cards */
+.filament-stats-card {
+    border-radius: 14px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Buttons */
+.filament-button {
+    border-radius: 8px !important;
+    font-weight: 600;
+    padding: 0.6rem 1.2rem !important;
+}
+
+/* Tables */
+.table td, .table th {
+    padding: 0.8rem 1.2rem !important;
+}
