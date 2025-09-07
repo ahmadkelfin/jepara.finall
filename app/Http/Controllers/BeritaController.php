@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -35,7 +35,7 @@ class BeritaController extends Controller
             $query->where('judul', 'like', "%{$search}%");
         }
 
-        $beritas = $query->orderByDesc('created_at')
+        $beritas = $query->latest()
             ->paginate(9)
             ->appends($request->only('kategori', 'search'));
 
@@ -47,8 +47,7 @@ class BeritaController extends Controller
      */
     public function show(Berita $berita)
     {
-        // Ambil 5 berita populer selain yang sedang dibuka
-        $populer = Berita::orderByDesc('created_at')
+        $populer = Berita::latest()
             ->where('id', '!=', $berita->id)
             ->take(5)
             ->get();
@@ -61,8 +60,9 @@ class BeritaController extends Controller
      */
     public function create()
     {
-        $kategoris = self::KATEGORI;
-        return view('admin.berita.create', compact('kategoris'));
+        return view('admin.berita.create', [
+            'kategoris' => self::KATEGORI,
+        ]);
     }
 
     /**
@@ -70,12 +70,7 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'judul'    => ['required', 'string', 'max:255'],
-            'kategori' => ['required', Rule::in(self::KATEGORI)],
-            'konten'   => ['required', 'string'],
-            'gambar'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
-        ]);
+        $validated = $this->validateData($request);
 
         if ($request->hasFile('gambar')) {
             $validated['gambar'] = $request->file('gambar')->store('berita', 'public');
@@ -84,7 +79,7 @@ class BeritaController extends Controller
         Berita::create($validated);
 
         return redirect()
-            ->route('berita.index')
+            ->route('admin.berita.index')
             ->with('success', 'Berita berhasil ditambahkan.');
     }
 
@@ -93,8 +88,10 @@ class BeritaController extends Controller
      */
     public function edit(Berita $berita)
     {
-        $kategoris = self::KATEGORI;
-        return view('admin.berita.edit', compact('berita', 'kategoris'));
+        return view('admin.berita.edit', [
+            'berita'    => $berita,
+            'kategoris' => self::KATEGORI,
+        ]);
     }
 
     /**
@@ -102,15 +99,10 @@ class BeritaController extends Controller
      */
     public function update(Request $request, Berita $berita)
     {
-        $validated = $request->validate([
-            'judul'    => ['required', 'string', 'max:255'],
-            'kategori' => ['required', Rule::in(self::KATEGORI)],
-            'konten'   => ['required', 'string'],
-            'gambar'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
-        ]);
+        $validated = $this->validateData($request);
 
         if ($request->hasFile('gambar')) {
-            if ($berita->gambar) {
+            if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
                 Storage::disk('public')->delete($berita->gambar);
             }
             $validated['gambar'] = $request->file('gambar')->store('berita', 'public');
@@ -119,7 +111,7 @@ class BeritaController extends Controller
         $berita->update($validated);
 
         return redirect()
-            ->route('berita.index')
+            ->route('admin.berita.index')
             ->with('success', 'Berita berhasil diperbarui.');
     }
 
@@ -128,11 +120,25 @@ class BeritaController extends Controller
      */
     public function destroy(Berita $berita)
     {
-        if ($berita->gambar) {
+        if ($berita->gambar && Storage::disk('public')->exists($berita->gambar)) {
             Storage::disk('public')->delete($berita->gambar);
         }
+
         $berita->delete();
 
         return back()->with('success', 'Berita berhasil dihapus.');
+    }
+
+    /**
+     * VALIDASI DATA REUSABLE
+     */
+    private function validateData(Request $request): array
+    {
+        return $request->validate([
+            'judul'    => ['required', 'string', 'max:255'],
+            'kategori' => ['required', Rule::in(self::KATEGORI)],
+            'isi'      => ['required', 'string'], // konsisten sama DB
+            'gambar'   => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+        ]);
     }
 }

@@ -19,6 +19,8 @@ return new class extends Migration
                 $table->string('deskripsi')->nullable()->comment('Deskripsi singkat layanan');
                 $table->string('icon')->nullable()->comment('Path icon atau gambar layanan');
                 $table->string('link')->nullable()->comment('URL tujuan layanan');
+                $table->string('url')->nullable();
+                $table->string('ikon')->nullable();
                 $table->timestamps();
             });
         }

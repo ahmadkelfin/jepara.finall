@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Galeri;
 
 class GaleriController extends Controller
 {
     public function index()
     {
-        // Contoh mengembalikan view galeri/index.blade.php
-        return view('galeri');
+        $galeri = Galeri::all();
+        return view('galeri', compact('galeri'));
     }
 }

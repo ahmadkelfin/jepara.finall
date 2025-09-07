@@ -8,54 +8,56 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @php
+            use App\Models\Layanan;
+
+            // layanan statis
             $layanan = [
                 [
                     'img' => 'layanankependudukan.png',
                     'title' => 'Layanan Kependudukan',
                     'desc' => 'Pelayanan Administrasi Kependudukan di Kabupaten Jepara',
-                    'bg' => 'bg-white dark:bg-gray-800',
                     'url' => 'https://pindangcemplung.jepara.go.id/'
                 ],
                 [
                     'img' => 'layananperizinan.png',
                     'title' => 'Layanan Perizinan',
                     'desc' => 'Pelayanan Perizinan Mandiri Yang Tidak Ada di OSS',
-                    'bg' => 'bg-blue-50 dark:bg-gray-700',
                     'url' => 'https://joss.jepara.go.id/'
                 ],
                 [
                     'img' => 'layananak1.png',
                     'title' => 'Layanan AK1',
                     'desc' => 'Pelayanan Surat AK1 Bagi Pencari Kerja Secara Mandiri',
-                    'bg' => 'bg-white dark:bg-gray-800',
                     'url' => 'https://yokerjo.jepara.go.id/'
                 ],
                 [
                     'img' => 'layananopendata.png',
                     'title' => __('layanan.opendata.title'),
                     'desc' => __('layanan.opendata.desc'),
-                    'bg' => 'bg-white dark:bg-gray-800',
                     'url' => 'https://yokerjo.jepara.go.id/'
                 ],
                 [
                     'img' => 'layanandatastatistik.png',
                     'title' => __('layanan.datastatistik.title'),
                     'desc' => __('layanan.datastatistik.desc'),
-                    'bg' => 'bg-white dark:bg-gray-800',
                     'url' => 'https://samudra.jepara.go.id/'
                 ],
                 [
                     'img' => 'layanankependudukan.png',
                     'title' => __('layanan.pengaduan.title'),
                     'desc' => __('layanan.pengaduan.desc'),
-                    'bg' => 'bg-white dark:bg-gray-800',
                     'url' => 'https://wadul.jepara.go.id/'
                 ],
             ];
+
+            // layanan dari database
+            $layananDb = Layanan::all();
         @endphp
 
+        {{-- Layanan statis --}}
         @foreach($layanan as $item)
-            <a href="{{ $item['url'] }}" target="_blank" class="p-6 {{ $item['bg'] }} rounded-2xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 flex flex-col items-center text-center">
+            <a href="{{ $item['url'] }}" target="_blank"
+               class="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 flex flex-col items-center text-center">
                 <div class="flex justify-center mb-4">
                     <img src="{{ asset('images/'.$item['img']) }}" alt="{{ $item['title'] }}" class="h-20 w-20">
                 </div>
@@ -63,6 +65,22 @@
                 <p class="text-gray-600 dark:text-gray-300 text-sm">{{ $item['desc'] }}</p>
             </a>
         @endforeach
+
+        {{-- Layanan dinamis --}}
+        @foreach($layananDb as $item)
+            <a href="{{ $item->url ?? '#' }}" target="_blank"
+               class="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 flex flex-col items-center text-center">
+                <div class="flex justify-center mb-4">
+                    @if($item->ikon)
+                        <img src="{{ asset('storage/'.$item->ikon) }}" alt="{{ $item->nama_layanan }}" class="h-20 w-20">
+                    @else
+                        <span class="text-gray-400">No Icon</span>
+                    @endif
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ $item->nama_layanan }}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{{ $item->deskripsi }}</p>
+            </a>
+        @endforeach
     </div>
-</div> 
+</div>
 @endsection

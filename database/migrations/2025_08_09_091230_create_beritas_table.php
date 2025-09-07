@@ -4,18 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
-{
-    if (!Schema::hasColumn('beritas', 'isi')) {
-        Schema::table('beritas', function (Blueprint $table) {
-            $table->text('isi')->after('judul');
+    {
+        Schema::create('beritas', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->enum('kategori', [
+                'bencana', 'ekonomi', 'infrastruktur', 'kesehatan', 'pendidikan', 'teknologi'
+            ]);
+            $table->text('isi'); // bukan 'konten'
+            $table->string('gambar')->nullable();
+            $table->timestamps();
         });
-    }
-
-
-
     }
 
     public function down(): void

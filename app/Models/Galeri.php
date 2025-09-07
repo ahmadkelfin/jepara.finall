@@ -9,10 +9,25 @@ class Galeri extends Model
 {
     use HasFactory;
 
-    protected $table = 'galeris'; // default sesuai Laravel
+    /**
+     * Nama tabel (opsional, kalau tabelmu bukan 'galeris')
+     */
+    protected $table = 'galeris';
+
+    /**
+     * Kolom yang bisa diisi mass-assignment
+     */
     protected $fillable = [
         'judul',
         'deskripsi',
-        'gambar'
+        'gambar',
+    ];
+
+    /**
+     * Default casting (optional, untuk format otomatis)
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 }

@@ -9,10 +9,14 @@
         @foreach($heroes as $hero)
             <div class="swiper-slide relative">
                 <img src="{{ asset('storage/' . $hero->image) }}" 
-                     class="w-full h-[500px] md:h-[600px] lg:h-[700px] object-cover">
+                     class="w-full h-[500px] md:h-[600px] lg:h-[700px] object-cover"
+                     alt="Hero {{ $loop->index + 1 }}">
             </div>
         @endforeach
     </div>
+
+    <!-- overlay gelap -->
+    <div class="absolute inset-0 bg-black/40"></div>
 
     <!-- teks statis + search bar -->
     <div class="absolute inset-0 flex flex-col justify-center items-center z-10 text-center text-white px-6 md:px-12">
@@ -64,7 +68,6 @@
   });
 </script>
 
-
 <!-- Layanan Jepara Digital -->
 <div class="max-w-7xl mx-auto px-6 py-12">
     <div class="text-center mb-12">
@@ -94,7 +97,10 @@
         <a href="{{ $item['url'] }}" target="_blank" class="block">
             <div class="p-6 {{ $item['bg'] }} rounded-2xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 flex flex-col items-center text-center">
                 <div class="flex justify-center mb-4">
-                    <img src="{{ asset('images/'.$item['img']) }}" alt="{{ $item['title'] }}" class="h-20 w-20">
+                    <img src="{{ asset('images/'.$item['img']) }}" 
+                         alt="{{ $item['title'] }}" 
+                         class="h-20 w-20"
+                         onerror="this.src='{{ asset('images/default.png') }}'">
                 </div>
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">{{ $item['title'] }}</h3>
                 <p class="text-gray-600 dark:text-gray-300 text-sm">{{ $item['desc'] }}</p>
@@ -105,9 +111,4 @@
 
     <!-- Tombol Lainnya -->
     <div class="text-center mt-12">
-        <a href="{{ route('layanan') }}" class="inline-block px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow transition duration-300">
-            Layanan Lainnya
-        </a>
-    </div>
-</div>
-@endsection
+        <a href="{{ route('layanan') }}" class="inline-block px

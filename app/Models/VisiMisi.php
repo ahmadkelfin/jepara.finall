@@ -4,12 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Layanan extends Model
+class VisiMisi extends Model
 {
     protected $fillable = [
-        'judul',
-        'deskripsi',
-        'icon',
-        'link',
+        'type', 'title', 'description', 'icon', 'color'
     ];
 }
